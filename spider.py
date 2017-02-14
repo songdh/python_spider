@@ -49,10 +49,10 @@ def responseWithPage(page):
 
 def printFormatResponse(response):
 	content = response.read().decode('utf-8')
-	parttern = '<div class="author clearfix">.*?href=.*?<h2>(.*?)</h2>.*?<div class="content">.*?<span>(.*?)</span>.*?<img src="(.*?)".*?/>.*?'
+	parttern = r'<div class="author clearfix">.*?href=.*?<h2>(.*?)</h2>.*?<div class="content">.*?<span>(.*?)</span>.*?</div>(.*?)</div>.*?'
 	match = re.compile(parttern,re.S)
 	items = re.findall(match,content)
-
+	
 	for item in items:
 		if len(item) >= 1:
 			print('authen:' + item[0])
@@ -62,8 +62,13 @@ def printFormatResponse(response):
 			print(article)
 
 		if len(item) >= 3:
-			print('图片地址:' + item[2] + '\n')
-			pass
+			#取出字符串中的图片
+			parttern = r'<div class="thumb">.*?<img src="(.*?)".*?/>.*?'
+			match = re.compile(parttern,re.S)
+			imageItems = re.findall(match,item[2])
+
+			for img in imageItems:
+				print('图片地址:' + img + '\n')
 			
 		print('\n')
 
